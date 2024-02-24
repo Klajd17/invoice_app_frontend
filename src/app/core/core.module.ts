@@ -6,6 +6,7 @@ import { HomeComponent } from './components/home/home.component';
 import { FullComponent } from './components/layouts/full/full.component';
 import { HeaderComponent } from './components/layouts/full/header/header.component';
 import { SidebarComponent } from './components/layouts/full/sidebar/sidebar.component';
+import {SharedModule} from "../shared/shared.module";
 
 
 @NgModule({
@@ -15,9 +16,10 @@ import { SidebarComponent } from './components/layouts/full/sidebar/sidebar.comp
     HeaderComponent,
     SidebarComponent,
   ],
-  imports: [
-    CommonModule,
-    CoreRoutingModule
-  ]
+    imports: [
+        CommonModule,
+        CoreRoutingModule,
+        SharedModule
+    ]
 })
 export class CoreModule { }
