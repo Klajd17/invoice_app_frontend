@@ -8,6 +8,7 @@ export interface Menu{
 }
 
 const MENUITEMS = [
+  {state: 'dashboard', name: 'Dashboard', icon: 'dashboard', role: ''},
   {state: 'invoice', name: 'Invoices', icon: 'account_balance', role: ''},
   {state: 'item', name: 'Items', icon: 'inventory_2', role: ''},
   {state: 'customer', name: 'Customers', icon: 'account_circle', role: ''},

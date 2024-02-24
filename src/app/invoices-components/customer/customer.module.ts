@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { CustomerRoutingModule } from './customer-routing.module';
 import { CustomerListComponent } from './components/customer-list/customer-list.component';
+import {RouterModule} from "@angular/router";
+import {MaterialRoutes} from "../invoices-components-routing.module";
 
 
 @NgModule({
@@ -11,6 +13,7 @@ import { CustomerListComponent } from './components/customer-list/customer-list.
   ],
   imports: [
     CommonModule,
+    RouterModule.forChild(MaterialRoutes),
     CustomerRoutingModule
   ]
 })
