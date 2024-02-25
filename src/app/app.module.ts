@@ -9,6 +9,7 @@ import {SharedModule} from "./shared/shared.module";
 import {CustomerModule} from "./invoices-components/customer/customer.module";
 import {InvoiceModule} from "./invoices-components/invoice/invoice.module";
 import {ItemModule} from "./invoices-components/item/item.module";
+import {HttpClientModule} from "@angular/common/http";
 
 
 
@@ -24,7 +25,8 @@ import {ItemModule} from "./invoices-components/item/item.module";
         SharedModule,
         CustomerModule,
         InvoiceModule,
-        ItemModule
+        ItemModule,
+        HttpClientModule
     ],
   providers: [],
   bootstrap: [AppComponent]

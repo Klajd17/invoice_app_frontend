@@ -1,0 +1,64 @@
+.float-right{
+  float: right;
+}
+
+mat-card{
+  padding: 20px;
+}
+
+table{
+  width: 100%;
+}
+
+.mat-flat-button{
+  background-color:#0c6ea5!important;
+  color: #fff;
+}
+
+.mat-icon-button{
+  color: #0c6ea5!important;
+}
+
+.current-balance {
+  background: #5b6eb5;
+  border: 1px solid #5b6eb5;
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 5px 10px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.5), inset 0 5px 15px rgba(255,255,255,0.3);
+  color: #fff;
+  display: block;
+  margin: 18px auto;
+  padding-top: 12px;
+  position: relative;
+  width: 15%;
+  z-index: 1;
+}
+
+.current-balance h2 {
+  font-size: 30px;
+  text-align: center;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+}
+.current-balance h2 span {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin-top: 0.5rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+}
+
+.balance-container{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  //background-image: url("../../../../../assets/balance-bg1.jpg");
+}
+
+.main-heading-container{
+  min-height: 12vh;
+}
+
+.main-heading-container::before,
+.main-heading-container::after{
+  width: 98%;
+}

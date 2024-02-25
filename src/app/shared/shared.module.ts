@@ -36,7 +36,21 @@ import {MatBadgeModule} from "@angular/material/badge";
 import {MatStepperModule} from "@angular/material/stepper";
 import {AccordionAnchorDirective, AccordionDirective, AccordionLinkDirective} from "./components/accordion";
 import {MenuItems} from "./components/menu-items";
+import {NgxUiLoaderConfig, NgxUiLoaderModule, PB_DIRECTION, SPINNER} from "ngx-ui-loader";
 
+
+const ngxUiLoaderConfig: NgxUiLoaderConfig = {
+  text: 'Loading...',
+  textColor: '#ffffff',
+  textPosition: 'center-center',
+  pbColor: 'blue',
+  bgsColor: 'blue',
+  fgsColor:'blue',
+  fgsType: SPINNER.ballSpinClockwise,
+  fgsSize: 100,
+  pbDirection: PB_DIRECTION.leftToRight,
+  pbThickness: 5,
+};
 const MaterialModules = [
   FormsModule,
   ReactiveFormsModule,
@@ -81,7 +95,8 @@ const MaterialModules = [
   imports: [
     CommonModule,
     MaterialModules,
-    SharedRoutingModule
+    SharedRoutingModule,
+    NgxUiLoaderModule.forRoot(ngxUiLoaderConfig)
   ],
   exports: [
     MaterialModules,

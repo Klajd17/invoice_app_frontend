@@ -5,6 +5,7 @@ import { CustomerRoutingModule } from './customer-routing.module';
 import { CustomerListComponent } from './components/customer-list/customer-list.component';
 import {RouterModule} from "@angular/router";
 import {MaterialRoutes} from "../invoices-components-routing.module";
+import {SharedModule} from "../../shared/shared.module";
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import {MaterialRoutes} from "../invoices-components-routing.module";
   imports: [
     CommonModule,
     RouterModule.forChild(MaterialRoutes),
-    CustomerRoutingModule
+    CustomerRoutingModule,
+    SharedModule
   ]
 })
 export class CustomerModule { }
