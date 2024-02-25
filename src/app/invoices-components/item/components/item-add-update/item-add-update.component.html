@@ -1,0 +1,280 @@
+<div class="main-heading-container">
+  <h2 class="main-heading">
+    <span class="main-heading-primary" *ngIf="action === ADD"> Add Items</span>
+    <span class="main-heading-primary" *ngIf="action === UPDATE"> Update Items</span>
+  </h2>
+</div>
+
+
+<div class="container-fluid">
+
+  <div class="container">
+    <form [formGroup]="itemForm">
+    <!-- Title -->
+    <div class="d-flex justify-content-between align-items-lg-center py-3 flex-column flex-lg-row">
+      <div class="hstack gap-3">
+        <button class="btn btn-light btn-sm btn-icon-text"><i class="bi bi-x"></i> <span class="text">Cancel</span></button>
+        <button type="button" class="btn btn-primary" *ngIf="action === ADD" (click)="handleAddItem()">Add Items</button>
+        <button type="button" class="btn btn-primary" *ngIf="action === UPDATE" (click)="handleUpdateItem()">Update Items</button>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="row">
+      <!-- Left side -->
+      <div class="col-lg-7">
+        <!-- Basic information -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h3 class="h6 mb-4">Basic information</h3>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Item Name</mat-label>
+                    <input matInput formControlName="name" required type="text">
+                    <mat-error *ngIf="itemForm.get('name')?.hasError('required')">This field is mandatory.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Item Code</mat-label>
+                    <input matInput formControlName="code" required type="text">
+                    <mat-error *ngIf="itemForm.get('code')?.hasError('required')">This field is mandatory.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-4">
+                <div class="mb-3">
+                  <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Price</mat-label>
+                    <input matInput formControlName="price" required type="number">
+                    <mat-error *ngIf="itemForm.get('price')?.hasError('required')">This field is mandatory.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="mb-3">
+                  <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Description</mat-label>
+                    <input matInput formControlName="description" required type="text">
+                    <mat-error *ngIf="itemForm.get('description')?.hasError('required')">This field is mandatory.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="mb-3">
+                  <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Item Type</mat-label>
+                    <input matInput formControlName="itemType" required type="number">
+                    <mat-error *ngIf="itemForm.get('itemType')?.hasError('required')">This field is mandatory.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Product Details: -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h3 class="h6 mb-4">Product Details</h3>
+            <div class="mb-3">
+              <mat-form-field appearance="fill" fxFlex>
+                <mat-label>Manufacturer</mat-label>
+                <input matInput formControlName="manufacturer" required type="text">
+                <mat-error *ngIf="itemForm.get('manufacturer')?.hasError('required')">This field is mandatory.</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="mb-3">
+              <mat-form-field appearance="fill" fxFlex>
+                <mat-label>Brand</mat-label>
+                <input matInput formControlName="brand" required type="text">
+                <mat-error *ngIf="itemForm.get('brand')?.hasError('required')">This field is mandatory.</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Model</mat-label>
+                    <input matInput formControlName="model" required type="text">
+                    <mat-error *ngIf="itemForm.get('model')?.hasError('required')">This field is mandatory.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Color</mat-label>
+                    <input matInput formControlName="color" required type="text">
+                    <mat-error *ngIf="itemForm.get('color')?.hasError('required')">This field is mandatory.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Size</mat-label>
+                    <input matInput formControlName="size" required type="text">
+                    <mat-error *ngIf="itemForm.get('size')?.hasError('required')">This field is mandatory.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Material</mat-label>
+                    <input matInput formControlName="material" required type="text">
+                    <mat-error *ngIf="itemForm.get('material')?.hasError('required')">This field is mandatory.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="mb-3">
+                  <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Country of Origin</mat-label>
+                    <input matInput formControlName="countryOfOrigin" required type="text">
+                    <mat-error *ngIf="itemForm.get('countryOfOrigin')?.hasError('required')">This field is mandatory.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- Right side -->
+      <div class="col-lg-5">
+        <!-- Identification -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h3 class="h6">Identification</h3>
+            <div class="mb-3">
+              <mat-form-field appearance="fill" fxFlex>
+                <mat-label>SKU</mat-label>
+                <input matInput formControlName="sku" required type="text">
+                <mat-error *ngIf="itemForm.get('sku')?.hasError('required')">This field is mandatory.</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="mb-3">
+              <mat-form-field appearance="fill" fxFlex>
+                <mat-label>Barcode</mat-label>
+                <input matInput formControlName="barcode" required type="text">
+                <mat-error *ngIf="itemForm.get('barcode')?.hasError('required')">This field is mandatory.</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dimensions and Weight: -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h3 class="h6">Dimensions and Weight:</h3>
+            <div class="row">
+            <div class="col-lg-6">
+            <div class="mb-3">
+              <mat-form-field appearance="fill" fxFlex>
+                <mat-label>Weight</mat-label>
+                <input matInput formControlName="weight" required type="number">
+                <mat-error *ngIf="itemForm.get('weight')?.hasError('required')">This field is mandatory.</mat-error>
+              </mat-form-field>
+            </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Length</mat-label>
+                    <input matInput formControlName="length" required type="number">
+                    <mat-error *ngIf="itemForm.get('length')?.hasError('required')">This field is mandatory.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Height</mat-label>
+                    <input matInput formControlName="height" required type="number">
+                    <mat-error *ngIf="itemForm.get('height')?.hasError('required')">This field is mandatory.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Width</mat-label>
+                    <input matInput formControlName="width" required type="number">
+                    <mat-error *ngIf="itemForm.get('width')?.hasError('required')">This field is mandatory.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Information -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h3 class="h6">Additional Information:</h3>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>VAT Rate</mat-label>
+                    <input matInput formControlName="vatRate" required type="number">
+                    <mat-error *ngIf="itemForm.get('vatRate')?.hasError('required')">This field is mandatory.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Warranty</mat-label>
+                    <input matInput formControlName="warranty" required type="text">
+                    <mat-error *ngIf="itemForm.get('warranty')?.hasError('required')">This field is mandatory.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Supplier</mat-label>
+                    <input matInput formControlName="supplier" required type="text">
+                    <mat-error *ngIf="itemForm.get('supplier')?.hasError('required')">This field is mandatory.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Unit of Measure (UOM)</mat-label>
+                    <input matInput formControlName="uom" required type="text">
+                    <mat-error *ngIf="itemForm.get('uom')?.hasError('required')">This field is mandatory.</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    </form>
+  </div>
+
+</div>
+
+
+
+

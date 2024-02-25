@@ -38,7 +38,6 @@ export class CustomerListComponent implements OnInit {
         this.customerList = response;
         console.log(this.customerList);
 
-        // Use MatTableDataSource with paginator
         this.dataSource = new MatTableDataSource(response);
         this.dataSource.paginator = this.paginator;
       },

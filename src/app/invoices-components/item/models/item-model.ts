@@ -1,0 +1,33 @@
+export class ItemModel {
+  constructor(
+    public id: number = 0,
+    public name: string = "",
+    public code: string = "",
+    public price: number = 0,
+    public description: string = "",
+    public isActive: boolean = true,
+    public deactivatedAt: Date | null = null,
+    public isDeleted: boolean = false,
+    public deletedAt: Date | null = null,
+    public itemType: number = 0,
+    public vatRate: number = 0,
+    public createdAt: Date | null = null,
+    public updatedAt: Date | null = null,
+    public weight: number = 0,
+    public length: number = 0,
+    public width: number = 0,
+    public height: number = 0,
+    public sku: string = "",
+    public barcode: string = "",
+    public manufacturer: string = "",
+    public brand: string = "",
+    public model: string = "",
+    public color: string = "",
+    public size: string = "",
+    public material: string = "",
+    public countryOfOrigin: string = "",
+    public warranty: string = "",
+    public supplier: string = "",
+    public uom: string = ""
+  ) {}
+}

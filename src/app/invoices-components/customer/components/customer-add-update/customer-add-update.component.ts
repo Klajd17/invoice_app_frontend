@@ -30,10 +30,9 @@ export class CustomerAddUpdateComponent implements OnInit {
 
   handleAddCustomer() {
     this.ngxService.start();
-    const formData = { ...this.customerForm.value };
     console.log(this.customerForm)
     if (this.customerForm.valid){
-      this.customerService.addCustomer(formData).subscribe({
+      this.customerService.addCustomer(this.customerForm.value).subscribe({
         next: (response: any) => {
           this.ngxService.stop();
           this.dialogRef.close(true);
@@ -56,10 +55,9 @@ export class CustomerAddUpdateComponent implements OnInit {
 
   handleUpdateCustomer() {
     this.ngxService.start();
-    const formData = { ...this.customerForm.value };
 
     if(this.customerForm.valid){
-      this.customerService.updateCustomer(formData).subscribe({
+      this.customerService.updateCustomer(this.customerForm.value).subscribe({
         next: (response: any) => {
           this.ngxService.stop();
           this.dialogRef.close(true);
