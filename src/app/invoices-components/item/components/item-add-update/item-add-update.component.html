@@ -70,7 +70,9 @@
                 <div class="mb-3">
                   <mat-form-field appearance="fill" fxFlex>
                     <mat-label>Item Type</mat-label>
-                    <input matInput formControlName="itemType" required type="number">
+                    <mat-select formControlName="itemType" required>
+                      <mat-option *ngFor="let type of itemTypes" [value]="type.value">{{type.name}}</mat-option>
+                    </mat-select>
                     <mat-error *ngIf="itemForm.get('itemType')?.hasError('required')">This field is mandatory.</mat-error>
                   </mat-form-field>
                 </div>

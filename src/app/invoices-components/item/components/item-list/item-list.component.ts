@@ -10,6 +10,7 @@ import {ADD, GlobalConstants, UPDATE} from "../../../../shared/cons/global-const
 import {DialogData} from "../../../../shared/models/general-response-model";
 import {ConfirmationDialogComponent} from "../../../dialog/confirmation-dialog/confirmation-dialog.component";
 import {ItemModel} from "../../models/item-model";
+import {GeneralService} from "../../../../core/services/general.service";
 
 @Component({
   selector: 'app-item-list',
@@ -22,8 +23,10 @@ export class ItemListComponent implements OnInit {
   dataSource: any;
   responseMessage: any;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  UPDATE = UPDATE;
+   ADD = ADD;
   constructor(private itemService: ItemService, private ngxService: NgxUiLoaderService, private dialog: MatDialog,
-              private snackbarService: SnackbarService, private router: Router) { }
+              private snackbarService: SnackbarService, private router: Router, private generalService:GeneralService) { }
 
   ngOnInit(): void {
     this.ngxService.start();
@@ -80,12 +83,9 @@ export class ItemListComponent implements OnInit {
     });
   }
 
-
-  handleAddAction() {
-    this.router.navigate(['/invoice-app/item-add-update'])
+  redirectToCreateUpdateItem(itemId: number, action:string) {
+    this.generalService.redirectToCreateUpdateItem(itemId,action)
   }
 
-  handleUpdateAction(itemId: number) {
-    this.router.navigate(['/invoice-app/item-add-update/', itemId]);
-  }
+
 }
