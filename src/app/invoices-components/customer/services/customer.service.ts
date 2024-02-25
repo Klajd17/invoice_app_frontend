@@ -16,10 +16,23 @@ export class CustomerService {
   }
 
   addCustomer(data: CustomerModel) {
-    return this.httpClient.post(this.url + 'api/Customers', data, {
+    return this.httpClient.post('/api/Customers', data, {
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
   }
+
+  updateCustomer(formData: CustomerModel) {
+    const customerId = formData.id;
+    return this.httpClient.put(`/api/Customers/${customerId}`, formData, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    });
+  }
+
+  deleteCustomer(customerId: number) {
+    return this.httpClient.delete(`/api/Customers/${customerId}`);
+  }
+
+
 
 
 }

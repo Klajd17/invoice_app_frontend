@@ -9,3 +9,6 @@ export class GlobalConstants{
   // Variable
   public static error = 'error';
 }
+
+export const ADD = 'add';
+export const UPDATE = 'update';

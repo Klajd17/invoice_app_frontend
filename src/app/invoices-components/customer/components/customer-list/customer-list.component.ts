@@ -7,7 +7,10 @@ import {CustomerService} from "../../services/customer.service";
 import {CustomerModel} from "../../models/customer-model";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
-import {GlobalConstants} from "../../../../shared/cons/global-constants";
+import {ADD, GlobalConstants, UPDATE} from "../../../../shared/cons/global-constants";
+import {DialogData} from "../../../../shared/models/general-response-model";
+import {CustomerAddUpdateComponent} from "../customer-add-update/customer-add-update.component";
+import {ConfirmationDialogComponent} from "../../../dialog/confirmation-dialog/confirmation-dialog.component";
 
 @Component({
   selector: 'app-customer-list',
@@ -15,7 +18,7 @@ import {GlobalConstants} from "../../../../shared/cons/global-constants";
   styleUrls: ['./customer-list.component.scss']
 })
 export class CustomerListComponent implements OnInit {
-  displayedColumns: string[] = ['name','email','phone','address','city','postalCode','country', 'edit'];
+  displayedColumns: string[] = ['name','email','phone','address','city','postalCode','country','view', 'edit', 'delete'];
   customerList: CustomerModel[] = [];
   dataSource: any;
   responseMessage: any;
@@ -56,7 +59,64 @@ export class CustomerListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  handleEditAction(element:any) {
+  handleUpdateAction(customer: CustomerModel) {
+    const data: DialogData = new DialogData(customer, UPDATE, 'Update Customer');
+    const dialogRef = this.dialog.open(CustomerAddUpdateComponent, {
+      width: '580px',
+      maxWidth: '850px',
+      height: 'auto',
+      disableClose: true,
+      data: data
+    });
 
+    dialogRef.afterClosed().subscribe({
+      next: (shouldRefresh: Boolean) => {
+        if (shouldRefresh) {
+          this.tableData();
+        }
+      }
+    });
+  }
+
+  handleDeleteAction(customer: CustomerModel) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: 'auto',
+      height: 'auto',
+      disableClose: true,
+      data: {
+        message: ` continue with deletion of ${customer.name}?`
+      }
+    });
+
+    dialogRef.componentInstance.onYes.subscribe(() => {
+      dialogRef.close();
+      this.customerService.deleteCustomer(customer.id).subscribe((_data) => {
+        this.tableData();
+        this.snackbarService.openSnackBar('\n' + 'Deletion completed successfully', 'OK');
+      });
+    });
+
+    dialogRef.componentInstance.onNo.subscribe(() => {
+      dialogRef.close();
+    });
+  }
+
+  handleAddAction() {
+    const data: DialogData = new DialogData(null, ADD, 'Add Customer');
+    const dialogRef = this.dialog.open(CustomerAddUpdateComponent, {
+      width: '580px',
+      maxWidth: '850px',
+      height: 'auto',
+      disableClose: true,
+      data: data
+    });
+
+    dialogRef.afterClosed().subscribe({
+      next: (shouldRefresh: Boolean) => {
+        if (shouldRefresh) {
+          this.tableData();
+        }
+      }
+    });
   }
 }

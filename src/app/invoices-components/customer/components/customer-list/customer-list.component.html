@@ -3,11 +3,16 @@
     <span class="main-heading-primary">Customer List</span>
   </h2>
 </div>
+
 <mat-card>
   <mat-form-field appearance="fill">
     <mat-label>Search</mat-label>
     <input matInput (keyup)="applyFilter($event)" #input>
   </mat-form-field>
+</mat-card>
+<hr>
+<mat-card class="balance-container">
+  <button mat-flat-button style="background-color: #0caf0c!important;" (click)="handleAddAction()">Add Customer</button>
 </mat-card>
 <hr>
 <div class="responsive_table">
@@ -40,11 +45,29 @@
       <th mat-header-cell *matHeaderCellDef>Country</th>
       <td mat-cell *matCellDef="let element">{{ element.country ? element.country : 'empty' }}</td>
     </ng-container>
-    <ng-container matColumnDef="edit">
-      <th mat-header-cell *matHeaderCellDef>Action</th>
+    <ng-container matColumnDef="view">
+      <th mat-header-cell *matHeaderCellDef>Invoices</th>
       <td mat-cell *matCellDef="let element" class="action-link">
-        <button mat-icon-button matTooltip="View" (click)="handleEditAction(element)">
+        <button mat-icon-button matTooltip="View">
           <mat-icon>remove_red_eye</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef>Modify</th>
+      <td mat-cell *matCellDef="let element" class="action-link">
+        <button mat-icon-button matTooltip="Edit" (click)="handleUpdateAction(element)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Delete button -->
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef>Delete</th>
+      <td mat-cell *matCellDef="let element" class="action-link">
+        <button style="color: red!important;" mat-icon-button matTooltip="Delete" (click)="handleDeleteAction(element)">
+          <mat-icon>delete</mat-icon>
         </button>
       </td>
     </ng-container>

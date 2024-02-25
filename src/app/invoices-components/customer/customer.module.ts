@@ -6,11 +6,13 @@ import { CustomerListComponent } from './components/customer-list/customer-list.
 import {RouterModule} from "@angular/router";
 import {MaterialRoutes} from "../invoices-components-routing.module";
 import {SharedModule} from "../../shared/shared.module";
+import { CustomerAddUpdateComponent } from './components/customer-add-update/customer-add-update.component';
 
 
 @NgModule({
   declarations: [
-    CustomerListComponent
+    CustomerListComponent,
+    CustomerAddUpdateComponent
   ],
   imports: [
     CommonModule,
