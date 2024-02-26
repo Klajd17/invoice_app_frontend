@@ -12,10 +12,10 @@
     <form [formGroup]="itemForm">
     <!-- Title -->
     <div class="d-flex justify-content-between align-items-lg-center py-3 flex-column flex-lg-row">
+      <button class="btn btn-light btn btn-icon-text" (click)="redirectItem()"><i class="bi bi-x"></i> <span class="text">Cancel</span></button>
       <div class="hstack gap-3">
-        <button class="btn btn-light btn-sm btn-icon-text"><i class="bi bi-x"></i> <span class="text">Cancel</span></button>
-        <button type="button" class="btn btn-primary" *ngIf="action === ADD" (click)="handleAddItem()">Add Items</button>
-        <button type="button" class="btn btn-primary" *ngIf="action === UPDATE" (click)="handleUpdateItem()">Update Items</button>
+        <button type="button" class="btn" style="background-color: #0caf0c!important;color:#ffffff;" *ngIf="action === ADD" (click)="handleAddItem()">Add Items</button>
+        <button type="button" class="btn"style="background-color: #0caf0c!important; color:#ffffff;" *ngIf="action === UPDATE" (click)="handleUpdateItem()">Update Items</button>
       </div>
     </div>
 
@@ -26,7 +26,7 @@
         <!-- Basic information -->
         <div class="card mb-4">
           <div class="card-body">
-            <h3 class="h6 mb-4">Basic information</h3>
+            <h3 class="h6 mb-4 item-title">Basic information</h3>
             <div class="row">
               <div class="col-lg-6">
                 <div class="mb-3">
@@ -83,7 +83,7 @@
         <!-- Product Details: -->
         <div class="card mb-4">
           <div class="card-body">
-            <h3 class="h6 mb-4">Product Details</h3>
+            <h3 class="h6 mb-4 item-title">Product Details</h3>
             <div class="mb-3">
               <mat-form-field appearance="fill" fxFlex>
                 <mat-label>Manufacturer</mat-label>
@@ -158,7 +158,7 @@
         <!-- Identification -->
         <div class="card mb-4">
           <div class="card-body">
-            <h3 class="h6">Identification</h3>
+            <h3 class="h6 item-title">Identification</h3>
             <div class="mb-3">
               <mat-form-field appearance="fill" fxFlex>
                 <mat-label>SKU</mat-label>
@@ -179,7 +179,7 @@
         <!-- Dimensions and Weight: -->
         <div class="card mb-4">
           <div class="card-body">
-            <h3 class="h6">Dimensions and Weight:</h3>
+            <h3 class="h6 item-title">Dimensions and Weight:</h3>
             <div class="row">
             <div class="col-lg-6">
             <div class="mb-3">
@@ -226,7 +226,7 @@
         <!-- Additional Information -->
         <div class="card mb-4">
           <div class="card-body">
-            <h3 class="h6">Additional Information:</h3>
+            <h3 class="h6 item-title">Additional Information:</h3>
             <div class="row">
               <div class="col-lg-6">
                 <div class="mb-3">

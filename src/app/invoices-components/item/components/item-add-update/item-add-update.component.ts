@@ -116,6 +116,10 @@ export class ItemAddUpdateComponent implements OnInit {
     //     this.detectAction();
     //   }
     // }
+    redirectItem() {
+        console.log('tessssssssssssssssss')
+        this.router.navigate(['invoice-app/item']);
+    }
 
     readFromURL() {
         this.activeRoute.queryParams.subscribe({
@@ -158,5 +162,4 @@ export class ItemAddUpdateComponent implements OnInit {
             uom: new FormControl(''),
         });
     }
-
 }
