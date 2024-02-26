@@ -10,6 +10,7 @@ import {CustomerModule} from "./invoices-components/customer/customer.module";
 import {InvoiceModule} from "./invoices-components/invoice/invoice.module";
 import {ItemModule} from "./invoices-components/item/item.module";
 import {HttpClientModule} from "@angular/common/http";
+import {NgxUiLoaderModule} from "ngx-ui-loader";
 
 
 
@@ -27,6 +28,7 @@ import {HttpClientModule} from "@angular/common/http";
         InvoiceModule,
         ItemModule,
         HttpClientModule,
+        NgxUiLoaderModule,
     ],
   providers: [],
   bootstrap: [AppComponent]

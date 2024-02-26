@@ -1,3 +1,10 @@
+
+<mat-toolbar color="primary">
+  <mat-toolbar-row fxLayout="row">
+    <span class="title-center">{{action}} Customer</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
 <mat-dialog-content class="mat-typography">
   <form [formGroup]="customerForm">
     <div fxFlex fxLayout="column">
@@ -49,8 +56,8 @@
 
 <mat-dialog-actions align="center">
   <div class="footer-buttons pt-3">
-    <button mat-raised-button color="warn" (click)="closeDialog(false)">Anullo</button>
-    <button mat-raised-button color="primary" *ngIf="action==ADD" (click)="handleAddCustomer()">Add</button>
-    <button mat-raised-button color="primary" *ngIf="action==UPDATE" (click)="handleUpdateCustomer()">Modify</button>
+    <button mat-raised-button class="btn-outline-light" (click)="closeDialog(false)">Cancel</button>
+    <button mat-raised-button style="background-color: #0c6ea5;color: #ffffff" *ngIf="action==ADD" (click)="handleAddCustomer()">Add Customer</button>
+    <button mat-raised-button style="background-color: #0c6ea5;color: #ffffff" *ngIf="action==UPDATE" (click)="handleUpdateCustomer()">Update Customer</button>
   </div>
 </mat-dialog-actions>

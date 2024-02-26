@@ -10,8 +10,8 @@ export class GlobalConstants{
   public static error = 'error';
 }
 
-export const ADD = 'add';
-export const UPDATE = 'update';
+export const ADD = 'Add';
+export const UPDATE = 'Update';
 
 export const ITEM_TYPES =[{name:'type 0', value:0},{name:'type 1', value:1}]
 export const ITEM_CREATE_UPDATE_ROUTE = 'invoice-app/item-add-update'

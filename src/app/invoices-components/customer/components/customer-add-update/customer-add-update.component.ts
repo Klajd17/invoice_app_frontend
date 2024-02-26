@@ -50,6 +50,7 @@ export class CustomerAddUpdateComponent implements OnInit {
       });
     }else {
       this.customerForm.markAllAsTouched();
+      this.ngxService.stop();
     }
   }
 
@@ -75,7 +76,8 @@ export class CustomerAddUpdateComponent implements OnInit {
         }
       });
     }else{
-      this.customerForm.markAllAsTouched()
+      this.customerForm.markAllAsTouched();
+      this.ngxService.stop();
     }
   }
 

@@ -8,7 +8,6 @@ import {ItemService} from "../../services/item.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {SnackbarService} from "../../../../core/services/snackbar.service";
 import {NgxUiLoaderService} from "ngx-ui-loader";
-import {map} from "rxjs";
 
 @Component({
     selector: 'app-item-add-update',
@@ -57,6 +56,7 @@ export class ItemAddUpdateComponent implements OnInit {
             });
         } else {
             this.itemForm.markAllAsTouched();
+            this.ngxService.stop();
         }
     }
 
@@ -83,6 +83,7 @@ export class ItemAddUpdateComponent implements OnInit {
             });
         } else {
             this.itemForm.markAllAsTouched();
+            this.ngxService.stop();
         }
     }
 
