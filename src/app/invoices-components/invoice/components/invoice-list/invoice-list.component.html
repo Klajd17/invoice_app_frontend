@@ -75,7 +75,7 @@
                           <div class="container">
                             <div class="row">
                               <div class="col-sm-6">
-                                <svg class="svg-box" width="357px" height="500px" viewBox="0 0 837 1045" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+                                <svg class="svg-box img-design" width="357px" height="500px" viewBox="0 0 837 1045" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
                                   <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
                                     <path d="M353,9 L626.664028,170 L626.664028,487 L353,642 L79.3359724,487 L79.3359724,170 L353,9 Z" id="Polygon-1" stroke="#3bafda" stroke-width="6" sketch:type="MSShapeGroup"></path>
                                     <path d="M78.5,529 L147,569.186414 L147,648.311216 L78.5,687 L10,648.311216 L10,569.186414 L78.5,529 Z" id="Polygon-2" stroke="#7266ba" stroke-width="6" sketch:type="MSShapeGroup"></path>
@@ -97,13 +97,13 @@
                       </ng-container>
                       <div class="card border shadow-none" *ngFor="let line of invoiceLines.controls; let i = index"
                            [formGroupName]="i">
-                        <div class="card-body">
+                        <div class="card-body card-custom-style" style="background: #f1f8ff;">
 
                           <div class="d-flex align-items-start border-bottom pb-3">
                             <div class="flex-grow-1 align-self-center overflow-hidden">
                               <div>
                                 <h5 class="text-truncate font-size-18"><a
-                                  class="text-dark"> {{ line.get('itemName')?.value }} </a></h5>
+                                  class="custom-color-text"> {{ line.get('itemName')?.value }} </a></h5>
                                 <p class="text-muted mb-0">
                                   <i class="bx bxs-star text-warning"></i>
                                   <i class="bx bxs-star text-warning"></i>
