@@ -1,1 +1,168 @@
-<p>invoice-list works!</p>
+<div class="main-heading-container">
+  <h2 class="main-heading">
+    <span class="main-heading-primary">Manage Invoice</span>
+  </h2>
+</div>
+
+<mat-card style="background-color: #f1f8fa">
+  <form [formGroup]="invoiceForm">
+    <div class="container mt-5">
+      <!-- Customer Selection Section -->
+      <div class="mb-4 row">
+        <div class="col-md-4">
+          <mat-form-field appearance="fill" fxFlex>
+            <mat-label>Customer</mat-label>
+            <mat-select formControlName="customerId" required>
+              <mat-option (click)="addNewCustomer()">Add New Customer</mat-option>
+              <mat-option *ngFor="let custumer of customerList" [value]="custumer.id">{{custumer.name}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="invoiceForm.get('customerId')?.hasError('required')">This field is mandatory.</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <textarea class="form-control" formControlName="notes" placeholder="Notes"></textarea>
+        </div>
+        <div class="col-md-2">
+          <input class="form-control" formControlName="invoiceNumber" placeholder="Invoice Number">
+        </div>
+      </div>
+
+
+      <div id="newCustomerForm" class="mb-4 d-none">
+        <label for="customerName" class="form-label">Customer Name:</label>
+        <input type="text" class="form-control" id="customerName" placeholder="Enter customer name">
+      </div>
+
+      <div class="mb-4">
+        <div class="row">
+          <div class="col-lg-4 col-sm-12">
+            <input type="text" class="form-control mb-3" id="itemSearch" placeholder="Type to search item" (input)="applyFilter($event)">
+
+            <div class="scrollable-item-list" style="height: 300px; overflow-y: auto;">
+              <div class="row">
+                <div class="col-md-6" *ngFor="let item of filteredItemList">
+                  <div class="card item-card mb-3" (click)="selectItem(item)">
+                    <div class="card-body">
+                      <h5 class="card-text">{{ item.name }}</h5>
+                      <p class="card-text">Item Code: {{ item.code }}</p>
+                      <p class="card-text">Item Price: {{ item.price }}</p>
+                      <p class="card-text">Item VAT Rate: {{ item.vatRate }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-lg-8 col-sm-12">
+            <div class="container px-3 clearfix">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-xl-8" formArrayName="invoiceLines">
+                      <div class="card border shadow-none" *ngFor="let line of invoiceLines.controls; let i = index" [formGroupName]="i">
+                        <div class="card-body" >
+
+                          <div class="d-flex align-items-start border-bottom pb-3">
+                            <div class="flex-grow-1 align-self-center overflow-hidden">
+                              <div>
+                                <h5 class="text-truncate font-size-18"><a class="text-dark"> {{ line.get('itemName')?.value }} </a></h5>
+                                <p class="text-muted mb-0">
+                                  <i class="bx bxs-star text-warning"></i>
+                                  <i class="bx bxs-star text-warning"></i>
+                                  <i class="bx bxs-star text-warning"></i>
+                                  <i class="bx bxs-star text-warning"></i>
+                                  <i class="bx bxs-star-half text-warning"></i>
+                                </p>
+                                <p class="mb-0 mt-1">Vat Rate : <span class="fw-medium">{{ line.get('vatRate')?.value }}</span></p>
+                              </div>
+                            </div>
+                            <div class="flex-shrink-0 ms-2">
+                              <ul class="list-inline mb-0 font-size-16">
+                                <li class="list-inline-item">
+                                  <a class="text-muted px-1">
+                                    <span style="color: red; cursor: pointer" (click)="removeInvoiceLine(i)">x</span>
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+
+                          <div>
+                            <div class="row">
+                              <div class="col-md-4">
+                                <div class="mt-3">
+                                  <p class="text-muted mb-2">Price</p>
+                                  <h5 class="mb-0 mt-2"><span class="text-muted me-2"></span>${{ line.get('unitPrice')?.value }}</h5>
+                                </div>
+                              </div>
+                              <div class="col-md-5">
+                                <div class="mt-3">
+                                  <p class="text-muted mb-2">Quantity</p>
+                                  <h5>{{ line.get('quantity')?.value }}</h5>
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="mt-3">
+                                  <p class="text-muted mb-2">Total</p>
+                                  <h5>$0</h5>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="col-xl-4">
+                      <div class="mt-5 mt-lg-0">
+                        <div class="card border shadow-none">
+                          <div class="card-header bg-transparent border-bottom py-3 px-4">
+                            <h5 class="font-size-16 mb-0">Order Summary <span class="float-end">#test</span></h5>
+                          </div>
+                          <div class="card-body p-4 pt-2">
+
+                            <div class="table-responsive">
+                              <table class="table mb-0">
+                                <tbody>
+                                <tr>
+                                  <td>Sub Total :</td>
+                                  <td class="text-end">$ 780</td>
+                                </tr>
+                                <tr>
+                                  <td>Discount : </td>
+                                  <td class="text-end">- $ 78</td>
+                                </tr>
+                                <tr class="bg-light">
+                                  <th>Total :</th>
+                                  <td class="text-end">
+                                            <span class="fw-bold">
+                                                $ 745.2
+                                            </span>
+                                  </td>
+                                </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button class="btn btn-success" (click)="handleInvoiceGenerate()">Generate PDF</button>
+      </div>
+    </div>
+  </form>
+</mat-card>
+
+

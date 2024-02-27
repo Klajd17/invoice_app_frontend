@@ -1,4 +1,21 @@
 import { Component, OnInit } from '@angular/core';
+import {NgxUiLoaderService} from "ngx-ui-loader";
+import {MatDialog} from "@angular/material/dialog";
+import {SnackbarService} from "../../../../core/services/snackbar.service";
+import {Router} from "@angular/router";
+import {GeneralService} from "../../../../core/services/general.service";
+import {ItemService} from "../../../item/services/item.service";
+import {CustomerService} from "../../../customer/services/customer.service";
+import {InvoiceService} from "../../services/invoice.service";
+import {CustomerModel} from "../../../customer/models/customer-model";
+import {MatTableDataSource} from "@angular/material/table";
+import {ADD, GlobalConstants, ITEM_TYPES} from "../../../../shared/cons/global-constants";
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {ItemModel} from "../../../item/models/item-model";
+import {DialogData} from "../../../../shared/models/general-response-model";
+import {
+  CustomerAddUpdateComponent
+} from "../../../customer/components/customer-add-update/customer-add-update.component";
 
 @Component({
   selector: 'app-invoice-list',
@@ -6,10 +23,185 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./invoice-list.component.scss']
 })
 export class InvoiceListComponent implements OnInit {
-
-  constructor() { }
+  customerList: CustomerModel[] = [];
+  filteredItemList: ItemModel[] = [];
+  itemList: ItemModel[] = [];
+  invoiceForm: FormGroup = new FormGroup({});
+  responseMessage: any;
+  selectedItems: { item: ItemModel, quantity: number }[] = [];
+  constructor(private formBuilder:FormBuilder,private invoiceService:InvoiceService, private itemService:ItemService, private customerService: CustomerService,private ngxService: NgxUiLoaderService,
+              private dialog: MatDialog,private snackbarService: SnackbarService,private router: Router, private generalService:GeneralService) { }
 
   ngOnInit(): void {
+    this.getCustomerList();
+    this.getItemList();
+    this.initInvoiceFG();
   }
 
+  getCustomerList() {
+    this.customerService.getCustomers().subscribe({
+      next: (response: CustomerModel[]) => {
+        this.ngxService.stop();
+        this.customerList = response;
+        console.log(this.customerList);
+      },
+      error: (error) => {
+        this.ngxService.stop();
+        if (error.error?.message) {
+          this.responseMessage = error.error?.message;
+        } else {
+          this.responseMessage = GlobalConstants.genericError;
+        }
+        this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      }
+    });
+  }
+
+  getItemList() {
+    this.itemService.getItems().subscribe({
+      next: (response: ItemModel[]) => {
+        this.ngxService.stop();
+        this.itemList = response;
+        this.filteredItemList = this.itemList;
+        console.log(this.itemList);
+      },
+      error: (error) => {
+        this.ngxService.stop();
+        if (error.error?.message) {
+          this.responseMessage = error.error?.message;
+        } else {
+          this.responseMessage = GlobalConstants.genericError;
+        }
+        this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      }
+    });
+  }
+
+  initInvoiceFG() {
+    this.invoiceForm = this.formBuilder.group({
+      invoiceDate: new FormControl(new Date(), Validators.required),
+      invoiceNumber: new FormControl(''),
+      customerId: new FormControl(null, Validators.required),
+      totalAmount: new FormControl(0, Validators.required),
+      totalVatAmount: new FormControl(0, Validators.required),
+      totalDiscountAmount: new FormControl(0, Validators.required),
+      isPaid: new FormControl(false, Validators.required),
+      notes: new FormControl(null),
+      user: new FormControl('Klajdi', Validators.required),
+      invoiceLines: new FormArray([]),
+    });
+  }
+
+  get invoiceLines() {
+    return this.invoiceForm.get('invoiceLines') as FormArray;
+  }
+
+  removeInvoiceLine(index: number): void {
+    const invoiceLines = this.invoiceForm.get('invoiceLines') as FormArray;
+    invoiceLines.removeAt(index);
+  }
+
+  initInvoiceLine(): FormGroup {
+    return this.formBuilder.group({
+      itemId: new FormControl(0, Validators.required),
+      itemName: new FormControl('string', Validators.required),
+      itemCode: new FormControl('string', Validators.required),
+      vatRate: new FormControl(0, Validators.required),
+      quantity: new FormControl(1, Validators.required),
+      uom: new FormControl('string', Validators.required),
+      unitPrice: new FormControl(0, Validators.required),
+      discountPercent: new FormControl(0, Validators.required),
+      notes: new FormControl('string')
+    });
+  }
+
+  selectItem(item: any): void {
+    const newItemFormGroup = this.initInvoiceLine();
+    newItemFormGroup.patchValue({
+      itemId: item.id,
+      itemName: item.name,
+      itemCode: item.code,
+      vatRate: item.vatRate,
+      uom: item.uom,
+      unitPrice: item.price,
+      discountPercent: 0,
+      notes: ''
+    });
+
+    this.invoiceLines.push(newItemFormGroup);
+    console.log(this.invoiceLines)
+  }
+
+
+  // selectItem(item: ItemModel) {
+  //   const selectedItemIndex = this.selectedItems.findIndex(selected => selected.item === item);
+  //
+  //   if (selectedItemIndex !== -1) {
+  //     this.selectedItems[selectedItemIndex].quantity++;
+  //   } else {
+  //     this.selectedItems.push({ item, quantity: 1 });
+  //   }
+  // }
+  // decrementQuantity(index: number) {
+  //   if (this.selectedItems[index].quantity > 1) {
+  //     this.selectedItems[index].quantity = this.selectedItems[index].quantity - 1;
+  //   }
+  // }
+
+
+  removeItem(index: number) {
+    this.selectedItems.splice(index, 1);
+    console.log(this.selectedItems)
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
+    this.filteredItemList = this.itemList.filter(item => item.name.toLowerCase().includes(filterValue));
+  }
+
+  handleInvoiceGenerate() {
+    this.ngxService.start();
+    console.log(this.invoiceForm);
+
+    if (this.invoiceForm.valid) {
+      this.invoiceService.addInvoice(this.invoiceForm.value).subscribe({
+        next: (response: any) => {
+          this.ngxService.stop();
+          this.snackbarService.openSnackBar('Invoice generated successfully!', 'success');
+        },
+        error: (error) => {
+          this.ngxService.stop();
+          if (error.error?.message) {
+            this.responseMessage = error.error?.message;
+          } else {
+            this.responseMessage = GlobalConstants.genericError;
+          }
+          this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+        }
+      });
+    } else {
+      this.invoiceForm.markAllAsTouched();
+      this.ngxService.stop();
+    }
+  }
+
+
+  addNewCustomer() {
+    const data: DialogData = new DialogData(null, ADD, 'Add Customer');
+    const dialogRef = this.dialog.open(CustomerAddUpdateComponent, {
+      width: '580px',
+      maxWidth: '850px',
+      height: 'auto',
+      disableClose: true,
+      data: data
+    });
+
+    dialogRef.afterClosed().subscribe({
+      next: (shouldRefresh: Boolean) => {
+        if (shouldRefresh) {
+          this.getCustomerList();
+        }
+      }
+    });
+  }
 }
