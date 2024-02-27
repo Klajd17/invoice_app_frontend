@@ -13,7 +13,8 @@ export class InvoiceModel {
     public updatedAt: Date | null = null,
     public user: string = "",
     public invoiceLines: InvoiceLineModel[] = [],
-    public totalWoVat: number = 0
+    public totalWoVat: number = 0,
+    public subTotal: number = 0
   ) {}
 }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NgxUiLoaderService} from "ngx-ui-loader";
 import {MatDialog} from "@angular/material/dialog";
 import {SnackbarService} from "../../../../core/services/snackbar.service";
@@ -8,14 +8,14 @@ import {ItemService} from "../../../item/services/item.service";
 import {CustomerService} from "../../../customer/services/customer.service";
 import {InvoiceService} from "../../services/invoice.service";
 import {CustomerModel} from "../../../customer/models/customer-model";
-import {MatTableDataSource} from "@angular/material/table";
 import {ADD, GlobalConstants, ITEM_TYPES} from "../../../../shared/cons/global-constants";
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ItemModel} from "../../../item/models/item-model";
 import {DialogData} from "../../../../shared/models/general-response-model";
 import {
   CustomerAddUpdateComponent
 } from "../../../customer/components/customer-add-update/customer-add-update.component";
+import {PdfService} from "../../../../shared/services/pdf.service";
 
 @Component({
   selector: 'app-invoice-list',
@@ -29,8 +29,10 @@ export class InvoiceListComponent implements OnInit {
   invoiceForm: FormGroup = new FormGroup({});
   responseMessage: any;
   selectedItems: { item: ItemModel, quantity: number }[] = [];
-  constructor(private formBuilder:FormBuilder,private invoiceService:InvoiceService, private itemService:ItemService, private customerService: CustomerService,private ngxService: NgxUiLoaderService,
-              private dialog: MatDialog,private snackbarService: SnackbarService,private router: Router, private generalService:GeneralService) { }
+
+  constructor(private pdfService: PdfService, private formBuilder: FormBuilder, private invoiceService: InvoiceService, private itemService: ItemService, private customerService: CustomerService, private ngxService: NgxUiLoaderService,
+              private dialog: MatDialog, private snackbarService: SnackbarService, private router: Router, private generalService: GeneralService) {
+  }
 
   ngOnInit(): void {
     this.getCustomerList();
@@ -85,6 +87,7 @@ export class InvoiceListComponent implements OnInit {
       totalAmount: new FormControl(0, Validators.required),
       totalVatAmount: new FormControl(0, Validators.required),
       totalDiscountAmount: new FormControl(0, Validators.required),
+      subTotal: new FormControl(0, Validators.required),
       isPaid: new FormControl(false, Validators.required),
       notes: new FormControl(null),
       user: new FormControl('Klajdi', Validators.required),
@@ -110,48 +113,124 @@ export class InvoiceListComponent implements OnInit {
       quantity: new FormControl(1, Validators.required),
       uom: new FormControl('string', Validators.required),
       unitPrice: new FormControl(0, Validators.required),
-      discountPercent: new FormControl(0, Validators.required),
-      notes: new FormControl('string')
+      discountPercent: new FormControl(20, Validators.required),
+      notes: new FormControl('string'),
+      lineTotal: new FormControl(0),
     });
   }
 
-  selectItem(item: any): void {
-    const newItemFormGroup = this.initInvoiceLine();
-    newItemFormGroup.patchValue({
-      itemId: item.id,
-      itemName: item.name,
-      itemCode: item.code,
-      vatRate: item.vatRate,
-      uom: item.uom,
-      unitPrice: item.price,
-      discountPercent: 0,
-      notes: ''
-    });
+  selectItem(item: ItemModel): void {
+    const existingLine = this.invoiceLines.controls.find(
+      (line) => line.get('itemId')?.value === item.id
+    );
 
-    this.invoiceLines.push(newItemFormGroup);
-    console.log(this.invoiceLines)
+    if (existingLine) {
+      const currentQuantity = existingLine.get('quantity')?.value || 0;
+      const newQuantity = currentQuantity + 1;
+      existingLine.patchValue({
+        quantity: newQuantity,
+      });
+      // Updated lineTotal after updating the quantity
+      const lineTotal = this.calculateTotalForLine(existingLine);
+      existingLine.patchValue({
+        lineTotal: lineTotal,
+      });
+    } else {
+      const newItemFormGroup = this.initInvoiceLine();
+      newItemFormGroup.patchValue({
+        itemId: item.id,
+        itemName: item.name,
+        itemCode: item.code,
+        vatRate: item.vatRate,
+        uom: item.uom,
+        unitPrice: item.price,
+        discountPercent: 0,
+        quantity: 1,
+        notes: '',
+      });
+      const lineTotal = this.calculateTotalForLine(newItemFormGroup);
+      newItemFormGroup.patchValue({
+        lineTotal: lineTotal,
+      });
+
+      this.invoiceLines.push(newItemFormGroup);
+    }
+
+    console.log(this.invoiceLines);
   }
 
 
-  // selectItem(item: ItemModel) {
-  //   const selectedItemIndex = this.selectedItems.findIndex(selected => selected.item === item);
-  //
-  //   if (selectedItemIndex !== -1) {
-  //     this.selectedItems[selectedItemIndex].quantity++;
-  //   } else {
-  //     this.selectedItems.push({ item, quantity: 1 });
-  //   }
-  // }
-  // decrementQuantity(index: number) {
-  //   if (this.selectedItems[index].quantity > 1) {
-  //     this.selectedItems[index].quantity = this.selectedItems[index].quantity - 1;
-  //   }
-  // }
 
+  //Calculations
+  calculateTotalForLine(line: AbstractControl): number {
+    const quantity = line.get('quantity')?.value || 0;
+    const unitPrice = line.get('unitPrice')?.value || 0;
+    const lineTotal = quantity * unitPrice;
 
-  removeItem(index: number) {
-    this.selectedItems.splice(index, 1);
-    console.log(this.selectedItems)
+    return lineTotal;
+  }
+
+  calculateSubTotal(): number {
+    const invoiceLines = this.invoiceForm.get('invoiceLines') as FormArray;
+    const subTotal = invoiceLines.controls.reduce((total, line) => total + this.calculateTotalForLine(line as FormGroup), 0);
+
+    // Patch totalAmount in the form
+    this.invoiceForm.patchValue({
+      subTotal: subTotal
+    });
+
+    return subTotal;
+  }
+
+  calculateDiscount(): number {
+    const discountPercent = this.invoiceForm.get('totalDiscountAmount')?.value || 0;
+    const subTotal = this.calculateSubTotal();
+    const discount = (subTotal * discountPercent) / 100;
+
+    // Patch totalDiscountAmount in the form
+    this.invoiceForm.patchValue({
+      totalDiscountAmount: discount
+    });
+
+    return discount;
+  }
+
+  calculateTotalVatAmount(): number {
+    const subTotal = this.calculateSubTotal();
+    const discount = this.calculateDiscount();
+
+    const invoiceLines = this.invoiceForm.get('invoiceLines') as FormArray;
+    const vatRateControls = invoiceLines.controls.map((line) => line.get('vatRate') as FormControl);
+
+    // Assuming all vatRate values are numbers
+    const vatRates = vatRateControls.map((control) => control.value || 0);
+
+    const vatAmount = (subTotal - discount) * (Math.max(...vatRates) / 100);
+
+    return vatAmount;
+  }
+
+  calculateFinalTotal(): number {
+    const subTotal = this.calculateSubTotal();
+    const discount = this.calculateDiscount();
+
+    const invoiceLines = this.invoiceForm.get('invoiceLines') as FormArray;
+    const vatRateControls = invoiceLines.controls.map((line) => line.get('vatRate') as FormControl);
+
+    const vatRates = vatRateControls.map((control) => control.value || 0);
+
+    const vatAmount = (subTotal - discount) * (Math.max(...vatRates) / 100);
+
+    this.invoiceForm.patchValue({
+      totalVatAmount: vatAmount
+    });
+
+    const finalTotal = subTotal - discount + vatAmount;
+    this.invoiceForm.patchValue({
+      totalAmount: finalTotal
+    });
+
+    return finalTotal;
   }
 
   applyFilter(event: Event) {
@@ -160,29 +239,30 @@ export class InvoiceListComponent implements OnInit {
   }
 
   handleInvoiceGenerate() {
-    this.ngxService.start();
-    console.log(this.invoiceForm);
+    this.pdfService.generateInvoicePDF(this.invoiceForm.value);
+    // this.ngxService.start();
+    console.log(this.invoiceForm.value);
 
-    if (this.invoiceForm.valid) {
-      this.invoiceService.addInvoice(this.invoiceForm.value).subscribe({
-        next: (response: any) => {
-          this.ngxService.stop();
-          this.snackbarService.openSnackBar('Invoice generated successfully!', 'success');
-        },
-        error: (error) => {
-          this.ngxService.stop();
-          if (error.error?.message) {
-            this.responseMessage = error.error?.message;
-          } else {
-            this.responseMessage = GlobalConstants.genericError;
-          }
-          this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
-        }
-      });
-    } else {
-      this.invoiceForm.markAllAsTouched();
-      this.ngxService.stop();
-    }
+    // if (this.invoiceForm.valid) {
+    //   this.invoiceService.addInvoice(this.invoiceForm.value).subscribe({
+    //     next: (response: any) => {
+    //       this.ngxService.stop();
+    //       this.snackbarService.openSnackBar('Invoice generated successfully!', 'success');
+    //     },
+    //     error: (error) => {
+    //       this.ngxService.stop();
+    //       if (error.error?.message) {
+    //         this.responseMessage = error.error?.message;
+    //       } else {
+    //         this.responseMessage = GlobalConstants.genericError;
+    //       }
+    //       this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+    //     }
+    //   });
+    // } else {
+    //   this.invoiceForm.markAllAsTouched();
+    //   this.ngxService.stop();
+    // }
   }
 
 

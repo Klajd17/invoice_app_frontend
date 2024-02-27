@@ -107,6 +107,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   font-weight: bold!important;
 }
 
+.border-style{
+  border: 1px solid #0c6ea5!important;
+}
+
+.card-custom-style{
+  box-shadow: -9px 6px 18px 0px rgba(0,0,0,0.25) !important;
+  border-radius: 1rem!important;
+}
+
 .mat-step-text-label{
   font-weight: bold;
 }
