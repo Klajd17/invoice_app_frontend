@@ -109,6 +109,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .border-style{
   border: 1px solid #0c6ea5!important;
+  margin-bottom: 2rem;
 }
 
 .card-custom-style{
@@ -122,6 +123,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .mat-step-header .mat-step-label.mat-step-label-active {
   color: #005b8f !important;
+}
+.text-area-style{
+  margin-bottom: 2rem;
+  height: 99px;
+  border-radius: 1rem;
+  box-shadow: -9px 6px 18px 0px rgba(0, 0, 0, 0.25) !important;
 }
 
 @keyframes rotateAnimation {

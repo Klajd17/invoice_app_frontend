@@ -10,7 +10,7 @@
       <!-- Customer Selection Section -->
       <div class="mb-4 row">
         <div class="col-md-4">
-          <mat-card class="card-custom-style">
+          <mat-card class="card-custom-style" style="margin-bottom: 2rem;">
             <mat-form-field appearance="fill" fxFlex>
               <mat-label>Customer</mat-label>
               <mat-select formControlName="customerId" required>
@@ -23,10 +23,13 @@
           </mat-card>
         </div>
         <div class="col-md-4">
-          <textarea class="form-control border-style" formControlName="notes" placeholder="Notes"></textarea>
+          <textarea class="form-control text-area-style" formControlName="notes" placeholder="Notes"></textarea>
         </div>
         <div class="col-md-2">
           <input class="form-control border-style" formControlName="invoiceNumber" placeholder="Invoice Number">
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-success" (click)="handleInvoiceGenerate()">Generate PDF</button>
         </div>
 
       </div>
@@ -39,7 +42,7 @@
       <div class="mb-4">
         <div class="row">
           <div class="col-lg-4 col-sm-12">
-            <mat-card class="card-custom-style">
+            <mat-card class="card-custom-style" style="margin-bottom: 2rem;">
               <input type="text" class="form-control mb-3 border-style" id="itemSearch" placeholder="Type to search item"
                      (input)="applyFilter($event)">
 
@@ -64,9 +67,34 @@
           <div class="col-lg-8 col-sm-12">
             <div class="container px-3 clearfix">
               <div class="card">
-                <div class="card-body">
+                <div class="card-body card-custom-style">
                   <div class="row">
                     <div class="col-xl-8" formArrayName="invoiceLines">
+                      <ng-container *ngIf="invoiceLines.controls.length === 0">
+                        <div class="ex-page-content bootstrap snippets bootdeys">
+                          <div class="container">
+                            <div class="row">
+                              <div class="col-sm-6">
+                                <svg class="svg-box" width="357px" height="500px" viewBox="0 0 837 1045" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+                                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+                                    <path d="M353,9 L626.664028,170 L626.664028,487 L353,642 L79.3359724,487 L79.3359724,170 L353,9 Z" id="Polygon-1" stroke="#3bafda" stroke-width="6" sketch:type="MSShapeGroup"></path>
+                                    <path d="M78.5,529 L147,569.186414 L147,648.311216 L78.5,687 L10,648.311216 L10,569.186414 L78.5,529 Z" id="Polygon-2" stroke="#7266ba" stroke-width="6" sketch:type="MSShapeGroup"></path>
+                                    <path d="M773,186 L827,217.538705 L827,279.636651 L773,310 L719,279.636651 L719,217.538705 L773,186 Z" id="Polygon-3" stroke="#f76397" stroke-width="6" sketch:type="MSShapeGroup"></path>
+                                    <path d="M639,529 L773,607.846761 L773,763.091627 L639,839 L505,763.091627 L505,607.846761 L639,529 Z" id="Polygon-4" stroke="#00b19d" stroke-width="6" sketch:type="MSShapeGroup"></path>
+                                    <path d="M281,801 L383,861.025276 L383,979.21169 L281,1037 L179,979.21169 L179,861.025276 L281,801 Z" id="Polygon-5" stroke="#ffaa00" stroke-width="6" sketch:type="MSShapeGroup"></path>
+                                  </g>
+                                </svg>
+                              </div>
+
+                              <div class="col-sm-6">
+                                <div class="message-box">
+                                  <h1 class="m-b-0">No Item Added</h1>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
                       <div class="card border shadow-none" *ngFor="let line of invoiceLines.controls; let i = index"
                            [formGroupName]="i">
                         <div class="card-body">
@@ -130,8 +158,8 @@
                     <div class="col-xl-4">
                       <div class="mt-5 mt-lg-0">
                         <div class="card border shadow-none">
-                          <div class="card-header bg-transparent border-bottom py-3 px-4">
-                            <h5 class="font-size-16 mb-0">Order Summary <span class="float-end">#test</span></h5>
+                          <div class="card-header bg-transparent border-bottom py-3 px-4" style="background: #00a5d7 !important;">
+                            <h5 class="font-size-16 mb-0" style="color: white;font-weight: bold;font-size: 13px;">Order Summary <span class="float-end">#test</span></h5>
                           </div>
                           <div class="card-body p-4 pt-2">
 
@@ -170,9 +198,6 @@
             </div>
           </div>
         </div>
-      </div>
-      <div>
-        <button class="btn btn-success" (click)="handleInvoiceGenerate()">Generate PDF</button>
       </div>
     </div>
   </form>
