@@ -232,7 +232,7 @@
                 <div class="mb-3">
                   <mat-form-field appearance="fill" fxFlex>
                     <mat-label>VAT Rate</mat-label>
-                    <input matInput formControlName="vatRate" required type="number">
+                    <input [min]="0" [max]="1" matInput formControlName="vatRate" required type="number">
                     <mat-error *ngIf="itemForm.get('vatRate')?.hasError('required')">This field is mandatory.</mat-error>
                   </mat-form-field>
                 </div>

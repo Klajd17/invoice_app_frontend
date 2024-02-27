@@ -18,6 +18,7 @@ export class ItemModel {
     public width: number = 0,
     public height: number = 0,
     public totalPerLine: number = 0,
+    public discountPercent: number = 0,
     public sku: string = "",
     public barcode: string = "",
     public manufacturer: string = "",

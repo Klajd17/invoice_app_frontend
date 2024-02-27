@@ -9,13 +9,23 @@ import {CustomerService} from "../../../customer/services/customer.service";
 import {InvoiceService} from "../../services/invoice.service";
 import {CustomerModel} from "../../../customer/models/customer-model";
 import {ADD, GlobalConstants, ITEM_TYPES} from "../../../../shared/cons/global-constants";
-import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from "@angular/forms";
 import {ItemModel} from "../../../item/models/item-model";
 import {DialogData} from "../../../../shared/models/general-response-model";
 import {
   CustomerAddUpdateComponent
 } from "../../../customer/components/customer-add-update/customer-add-update.component";
 import {PdfService} from "../../../../shared/services/pdf.service";
+import {v4 as uuidv4} from 'uuid';
 
 @Component({
   selector: 'app-invoice-list',
@@ -82,7 +92,7 @@ export class InvoiceListComponent implements OnInit {
   initInvoiceFG() {
     this.invoiceForm = this.formBuilder.group({
       invoiceDate: new FormControl(new Date(), Validators.required),
-      invoiceNumber: new FormControl(''),
+      invoiceNumber: new FormControl(uuidv4()),
       customerId: new FormControl(null, Validators.required),
       totalAmount: new FormControl(0, Validators.required),
       totalVatAmount: new FormControl(0, Validators.required),
@@ -91,13 +101,20 @@ export class InvoiceListComponent implements OnInit {
       isPaid: new FormControl(false, Validators.required),
       notes: new FormControl(null),
       user: new FormControl('Klajdi', Validators.required),
-      invoiceLines: new FormArray([]),
+      invoiceLines: new FormArray([],[this.invoiceLinesValidator]),
     });
   }
 
   get invoiceLines() {
     return this.invoiceForm.get('invoiceLines') as FormArray;
   }
+
+  invoiceLinesValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    if (control instanceof FormArray && control.length === 0) {
+      return { 'invoiceLinesRequired': true };
+    }
+    return null;
+  };
 
   removeInvoiceLine(index: number): void {
     const invoiceLines = this.invoiceForm.get('invoiceLines') as FormArray;
@@ -144,7 +161,7 @@ export class InvoiceListComponent implements OnInit {
         vatRate: item.vatRate,
         uom: item.uom,
         unitPrice: item.price,
-        discountPercent: 0,
+        discountPercent: 0.2,
         quantity: 1,
         notes: '',
       });
@@ -160,14 +177,23 @@ export class InvoiceListComponent implements OnInit {
   }
 
 
+  handleQuantityChange(event: any,line:any) {
+    console.log('tttttttttttttttttt');
+    this.calculateTotalForLine(line);
+    this.calculateSubTotal();
+    this.calculateTotalVatAmount();
+    this.calculateFinalTotal();
+  }
+
 
   //Calculations
   calculateTotalForLine(line: AbstractControl): number {
     const quantity = line.get('quantity')?.value || 0;
     const unitPrice = line.get('unitPrice')?.value || 0;
-    const lineTotal = quantity * unitPrice;
-
-    return lineTotal;
+    const discountPercent = line.get('discountPercent')?.value || 0;
+    let lineTotal = quantity * unitPrice;
+    const discount = lineTotal * discountPercent;
+    return lineTotal - discount;
   }
 
   calculateSubTotal(): number {
@@ -182,50 +208,34 @@ export class InvoiceListComponent implements OnInit {
     return subTotal;
   }
 
-  calculateDiscount(): number {
-    const discountPercent = this.invoiceForm.get('totalDiscountAmount')?.value || 0;
-    const subTotal = this.calculateSubTotal();
-    const discount = (subTotal * discountPercent) / 100;
-
-    // Patch totalDiscountAmount in the form
-    this.invoiceForm.patchValue({
-      totalDiscountAmount: discount
-    });
-
-    return discount;
-  }
-
   calculateTotalVatAmount(): number {
     const subTotal = this.calculateSubTotal();
-    const discount = this.calculateDiscount();
 
     const invoiceLines = this.invoiceForm.get('invoiceLines') as FormArray;
     const vatRateControls = invoiceLines.controls.map((line) => line.get('vatRate') as FormControl);
 
-    // Assuming all vatRate values are numbers
     const vatRates = vatRateControls.map((control) => control.value || 0);
 
-    const vatAmount = (subTotal - discount) * (Math.max(...vatRates) / 100);
+    const vatAmount = subTotal * (Math.max(...vatRates));
 
     return vatAmount;
   }
 
   calculateFinalTotal(): number {
     const subTotal = this.calculateSubTotal();
-    const discount = this.calculateDiscount();
 
     const invoiceLines = this.invoiceForm.get('invoiceLines') as FormArray;
     const vatRateControls = invoiceLines.controls.map((line) => line.get('vatRate') as FormControl);
 
     const vatRates = vatRateControls.map((control) => control.value || 0);
 
-    const vatAmount = (subTotal - discount) * (Math.max(...vatRates) / 100);
+    const vatAmount = subTotal * (Math.max(...vatRates) / 100);
 
     this.invoiceForm.patchValue({
       totalVatAmount: vatAmount
     });
 
-    const finalTotal = subTotal - discount + vatAmount;
+    const finalTotal = subTotal + vatAmount;
     this.invoiceForm.patchValue({
       totalAmount: finalTotal
     });
@@ -233,36 +243,40 @@ export class InvoiceListComponent implements OnInit {
     return finalTotal;
   }
 
+
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
     this.filteredItemList = this.itemList.filter(item => item.name.toLowerCase().includes(filterValue));
   }
 
   handleInvoiceGenerate() {
-    this.pdfService.generateInvoicePDF(this.invoiceForm.value);
-    // this.ngxService.start();
+    this.ngxService.start();
     console.log(this.invoiceForm.value);
 
-    // if (this.invoiceForm.valid) {
-    //   this.invoiceService.addInvoice(this.invoiceForm.value).subscribe({
-    //     next: (response: any) => {
-    //       this.ngxService.stop();
-    //       this.snackbarService.openSnackBar('Invoice generated successfully!', 'success');
-    //     },
-    //     error: (error) => {
-    //       this.ngxService.stop();
-    //       if (error.error?.message) {
-    //         this.responseMessage = error.error?.message;
-    //       } else {
-    //         this.responseMessage = GlobalConstants.genericError;
-    //       }
-    //       this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
-    //     }
-    //   });
-    // } else {
-    //   this.invoiceForm.markAllAsTouched();
-    //   this.ngxService.stop();
-    // }
+    if (this.invoiceForm.valid) {
+      this.invoiceService.addInvoice(this.invoiceForm.value).subscribe({
+        next: (response: any) => {
+          this.pdfService.generateInvoicePDF(this.invoiceForm.value);
+          this.ngxService.stop();
+          this.snackbarService.openSnackBar('Invoice generated successfully!', 'success');
+          this.invoiceForm.reset();
+          this.invoiceLines.clear();
+        },
+        error: (error) => {
+          this.ngxService.stop();
+          if (error.error?.message) {
+            this.responseMessage = error.error?.message;
+          } else {
+            this.responseMessage = GlobalConstants.genericError;
+          }
+          this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+        }
+      });
+    } else {
+      this.invoiceForm.markAllAsTouched();
+      this.ngxService.stop();
+    }
   }
 
 

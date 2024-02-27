@@ -14,26 +14,28 @@ export class PdfService {
     console.log(invoiceData)
     const invoiceHtml = this.constructInvoiceHtml(invoiceData);
 
-    // Append the HTML to the document body
     document.body.appendChild(invoiceHtml);
 
-    // Introduce a slight delay before capturing the content
     setTimeout(async () => {
       try {
         const canvas = await html2canvas(invoiceHtml);
 
-        const imgWidth = 208;
+        const imgWidth =  230;
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
         const contentDataURL = canvas.toDataURL('image/png');
         const pdf = new jsPDF('p', 'mm', 'a4');
-        pdf.addImage(contentDataURL, 'PNG', 0, 0, imgWidth, imgHeight);
+
+        // Calculate horizontal offset for centering content
+        const xOffset = (pdf.internal.pageSize.getWidth() - imgWidth) / 2;
+
+        pdf.addImage(contentDataURL, 'PNG', xOffset, 0, imgWidth, imgHeight);
         pdf.save('invoice.pdf');
 
       } catch (error) {
         console.error('Error generating PDF:', error);
       } finally {
-        // Remove the appended HTML from the document body
+
         document.body.removeChild(invoiceHtml);
       }
     }, 100);
@@ -103,6 +105,7 @@ export class PdfService {
                         <th>Item</th>
                         <th>Price</th>
                         <th>Quantity</th>
+                        <th>Discount %</th>
                         <th class="text-end" style="width: 120px;">Total</th>
                       </tr>
                     </thead>
@@ -118,30 +121,31 @@ export class PdfService {
                           </td>
                           <td>$ ${line.unitPrice.toFixed(2)}</td>
                           <td>${line.quantity}</td>
+                          <td>${line.discountPercent}</td>
                           <td class="text-end">$ ${line.lineTotal}</td>
                         </tr>
                       `).join('')}
-                       <tr>
-                                        <th scope="row" colspan="4" class="text-end">Sub Total</th>
-                                        <td class="text-end">${invoiceData.subTotal}</td>
-                                    </tr>
-                                    <!-- end tr -->
-                                    <tr>
-                                        <th scope="row" colspan="4" class="border-0 text-end">
-                                            Discount :</th>
-                                        <td class="border-0 text-end">- ${invoiceData.totalDiscountAmount}</td>
-                                    </tr>
-                                    <!-- end tr -->
-                                    <tr>
-                                        <th scope="row" colspan="4" class="border-0 text-end">
-                                            Total Vat Amount</th>
-                                        <td class="border-0 text-end">${invoiceData.totalVatAmount}</td>
-                                    </tr>
-                                    <!-- end tr -->
-                                    <tr>
-                                        <th scope="row" colspan="4" class="border-0 text-end">Total Lek</th>
-                                        <td class="border-0 text-end"><h4 class="m-0 fw-semibold">${invoiceData.totalAmount}</h4></td>
-                                    </tr>
+                      <tr>
+                        <th scope="row" colspan="5" class="text-end">Sub Total</th>
+                        <td class="text-end">${invoiceData.subTotal}</td>
+                      </tr>
+                      <!-- end tr -->
+
+                      <tr>
+                        <th scope="row" colspan="5" class="border-0 text-end">
+                          Total Vat Amount
+                        </th>
+                        <td class="border-0 text-end">${invoiceData.totalVatAmount}</td>
+                      </tr>
+                      <!-- end tr -->
+
+                      <tr>
+                        <th scope="row" colspan="5" class="border-0 text-end">Total Lek</th>
+                        <td class="border-0 text-end">
+                          <h4 class="m-0 fw-semibold">${invoiceData.totalAmount}</h4>
+                        </td>
+                      </tr>
+
                     </tbody>
                   </table>
                         </div>

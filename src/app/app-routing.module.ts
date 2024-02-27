@@ -4,8 +4,8 @@ import {HomeComponent} from "./core/components/home/home.component";
 import {FullComponent} from "./core/components/layouts/full/full.component";
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'home', component: HomeComponent },
+  { path: '', redirectTo: '/invoice-app/invoice', pathMatch: 'full' },
+  { path: 'home', redirectTo: '/invoice-app/invoice', pathMatch: 'full'  },
 
   {
     path: 'invoice-app',
