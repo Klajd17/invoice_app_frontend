@@ -1,5 +1,9 @@
 # InvoiceAppFrontend
 
+![img_1.png](img_1.png)
+![img_2.png](img_2.png)
+![img_3.png](img_3.png)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.0.0.
 
 ## Development server

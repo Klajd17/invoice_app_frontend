@@ -20,7 +20,7 @@ export class PdfService {
       try {
         const canvas = await html2canvas(invoiceHtml);
 
-        const imgWidth =  230;
+        const imgWidth =  297;
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
         const contentDataURL = canvas.toDataURL('image/png');
