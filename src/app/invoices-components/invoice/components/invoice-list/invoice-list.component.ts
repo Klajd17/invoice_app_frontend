@@ -130,7 +130,7 @@ export class InvoiceListComponent implements OnInit {
       quantity: new FormControl(1, Validators.required),
       uom: new FormControl('string', Validators.required),
       unitPrice: new FormControl(0, Validators.required),
-      discountPercent: new FormControl(20, Validators.required),
+      discountPercent: new FormControl(0, Validators.required),
       notes: new FormControl('string'),
       lineTotal: new FormControl(0),
     });
@@ -161,7 +161,7 @@ export class InvoiceListComponent implements OnInit {
         vatRate: item.vatRate,
         uom: item.uom,
         unitPrice: item.price,
-        discountPercent: 0.2,
+        discountPercent: 0,
         quantity: 1,
         notes: '',
       });
@@ -177,9 +177,12 @@ export class InvoiceListComponent implements OnInit {
   }
 
 
-  handleQuantityChange(event: any,line:any) {
-    console.log('tttttttttttttttttt');
-    this.calculateTotalForLine(line);
+  handleInputChange(event: any,line:any) {
+    const newLineTotal = this.calculateTotalForLine(line);
+    line.patchValue({
+      lineTotal: newLineTotal,
+    });
+
     this.calculateSubTotal();
     this.calculateTotalVatAmount();
     this.calculateFinalTotal();
@@ -229,7 +232,7 @@ export class InvoiceListComponent implements OnInit {
 
     const vatRates = vatRateControls.map((control) => control.value || 0);
 
-    const vatAmount = subTotal * (Math.max(...vatRates) / 100);
+    const vatAmount = subTotal * (Math.max(...vatRates));
 
     this.invoiceForm.patchValue({
       totalVatAmount: vatAmount
@@ -251,32 +254,33 @@ export class InvoiceListComponent implements OnInit {
   }
 
   handleInvoiceGenerate() {
-    this.ngxService.start();
+    // this.ngxService.start();
     console.log(this.invoiceForm.value);
+    this.pdfService.generateInvoicePDF(this.invoiceForm.value);
 
-    if (this.invoiceForm.valid) {
-      this.invoiceService.addInvoice(this.invoiceForm.value).subscribe({
-        next: (response: any) => {
-          this.pdfService.generateInvoicePDF(this.invoiceForm.value);
-          this.ngxService.stop();
-          this.snackbarService.openSnackBar('Invoice generated successfully!', 'success');
-          this.invoiceForm.reset();
-          this.invoiceLines.clear();
-        },
-        error: (error) => {
-          this.ngxService.stop();
-          if (error.error?.message) {
-            this.responseMessage = error.error?.message;
-          } else {
-            this.responseMessage = GlobalConstants.genericError;
-          }
-          this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
-        }
-      });
-    } else {
-      this.invoiceForm.markAllAsTouched();
-      this.ngxService.stop();
-    }
+    // if (this.invoiceForm.valid) {
+    //   this.invoiceService.addInvoice(this.invoiceForm.value).subscribe({
+    //     next: (response: any) => {
+    //       this.pdfService.generateInvoicePDF(this.invoiceForm.value);
+    //       this.ngxService.stop();
+    //       this.snackbarService.openSnackBar('Invoice generated successfully!', 'success');
+    //       this.invoiceForm.reset();
+    //       this.invoiceLines.clear();
+    //     },
+    //     error: (error) => {
+    //       this.ngxService.stop();
+    //       if (error.error?.message) {
+    //         this.responseMessage = error.error?.message;
+    //       } else {
+    //         this.responseMessage = GlobalConstants.genericError;
+    //       }
+    //       this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+    //     }
+    //   });
+    // } else {
+    //   this.invoiceForm.markAllAsTouched();
+    //   this.ngxService.stop();
+    // }
   }
 
 

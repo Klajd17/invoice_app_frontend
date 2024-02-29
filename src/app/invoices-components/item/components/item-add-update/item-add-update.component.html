@@ -61,8 +61,7 @@
                 <div class="mb-3">
                   <mat-form-field appearance="fill" fxFlex>
                     <mat-label>Description</mat-label>
-                    <input matInput formControlName="description" required type="text">
-                    <mat-error *ngIf="itemForm.get('description')?.hasError('required')">This field is mandatory.</mat-error>
+                    <input matInput formControlName="description" type="text">
                   </mat-form-field>
                 </div>
               </div>
@@ -87,15 +86,13 @@
             <div class="mb-3">
               <mat-form-field appearance="fill" fxFlex>
                 <mat-label>Manufacturer</mat-label>
-                <input matInput formControlName="manufacturer" required type="text">
-                <mat-error *ngIf="itemForm.get('manufacturer')?.hasError('required')">This field is mandatory.</mat-error>
+                <input matInput formControlName="manufacturer" type="text">
               </mat-form-field>
             </div>
             <div class="mb-3">
               <mat-form-field appearance="fill" fxFlex>
                 <mat-label>Brand</mat-label>
-                <input matInput formControlName="brand" required type="text">
-                <mat-error *ngIf="itemForm.get('brand')?.hasError('required')">This field is mandatory.</mat-error>
+                <input matInput formControlName="brand" type="text">
               </mat-form-field>
             </div>
             <div class="row">
@@ -103,8 +100,7 @@
                 <div class="mb-3">
                   <mat-form-field appearance="fill" fxFlex>
                     <mat-label>Model</mat-label>
-                    <input matInput formControlName="model" required type="text">
-                    <mat-error *ngIf="itemForm.get('model')?.hasError('required')">This field is mandatory.</mat-error>
+                    <input matInput formControlName="model" type="text">
                   </mat-form-field>
                 </div>
               </div>
@@ -112,8 +108,7 @@
                 <div class="mb-3">
                   <mat-form-field appearance="fill" fxFlex>
                     <mat-label>Color</mat-label>
-                    <input matInput formControlName="color" required type="text">
-                    <mat-error *ngIf="itemForm.get('color')?.hasError('required')">This field is mandatory.</mat-error>
+                    <input matInput formControlName="color" type="text">
                   </mat-form-field>
                 </div>
               </div>
@@ -123,8 +118,7 @@
                 <div class="mb-3">
                   <mat-form-field appearance="fill" fxFlex>
                     <mat-label>Size</mat-label>
-                    <input matInput formControlName="size" required type="text">
-                    <mat-error *ngIf="itemForm.get('size')?.hasError('required')">This field is mandatory.</mat-error>
+                    <input matInput formControlName="size" type="text">
                   </mat-form-field>
                 </div>
               </div>
@@ -132,8 +126,7 @@
                 <div class="mb-3">
                   <mat-form-field appearance="fill" fxFlex>
                     <mat-label>Material</mat-label>
-                    <input matInput formControlName="material" required type="text">
-                    <mat-error *ngIf="itemForm.get('material')?.hasError('required')">This field is mandatory.</mat-error>
+                    <input matInput formControlName="material" type="text">
                   </mat-form-field>
                 </div>
               </div>
@@ -143,8 +136,7 @@
                 <div class="mb-3">
                   <mat-form-field appearance="fill" fxFlex>
                     <mat-label>Country of Origin</mat-label>
-                    <input matInput formControlName="countryOfOrigin" required type="text">
-                    <mat-error *ngIf="itemForm.get('countryOfOrigin')?.hasError('required')">This field is mandatory.</mat-error>
+                    <input matInput formControlName="countryOfOrigin" type="text">
                   </mat-form-field>
                 </div>
               </div>
@@ -162,14 +154,13 @@
             <div class="mb-3">
               <mat-form-field appearance="fill" fxFlex>
                 <mat-label>SKU</mat-label>
-                <input matInput formControlName="sku" required type="text">
-                <mat-error *ngIf="itemForm.get('sku')?.hasError('required')">This field is mandatory.</mat-error>
+                <input matInput formControlName="sku" type="text">
               </mat-form-field>
             </div>
             <div class="mb-3">
               <mat-form-field appearance="fill" fxFlex>
                 <mat-label>Barcode</mat-label>
-                <input matInput formControlName="barcode" required type="text">
+                <input matInput formControlName="barcode" type="text">
                 <mat-error *ngIf="itemForm.get('barcode')?.hasError('required')">This field is mandatory.</mat-error>
               </mat-form-field>
             </div>
@@ -185,8 +176,7 @@
             <div class="mb-3">
               <mat-form-field appearance="fill" fxFlex>
                 <mat-label>Weight</mat-label>
-                <input matInput formControlName="weight" required type="number">
-                <mat-error *ngIf="itemForm.get('weight')?.hasError('required')">This field is mandatory.</mat-error>
+                <input matInput formControlName="weight" type="number">
               </mat-form-field>
             </div>
               </div>
@@ -194,8 +184,7 @@
                 <div class="mb-3">
                   <mat-form-field appearance="fill" fxFlex>
                     <mat-label>Length</mat-label>
-                    <input matInput formControlName="length" required type="number">
-                    <mat-error *ngIf="itemForm.get('length')?.hasError('required')">This field is mandatory.</mat-error>
+                    <input matInput formControlName="length" type="number">
                   </mat-form-field>
                 </div>
               </div>
@@ -205,8 +194,7 @@
                 <div class="mb-3">
                   <mat-form-field appearance="fill" fxFlex>
                     <mat-label>Height</mat-label>
-                    <input matInput formControlName="height" required type="number">
-                    <mat-error *ngIf="itemForm.get('height')?.hasError('required')">This field is mandatory.</mat-error>
+                    <input matInput formControlName="height" type="number">
                   </mat-form-field>
                 </div>
               </div>
@@ -214,8 +202,7 @@
                 <div class="mb-3">
                   <mat-form-field appearance="fill" fxFlex>
                     <mat-label>Width</mat-label>
-                    <input matInput formControlName="width" required type="number">
-                    <mat-error *ngIf="itemForm.get('width')?.hasError('required')">This field is mandatory.</mat-error>
+                    <input matInput formControlName="width" type="number">
                   </mat-form-field>
                 </div>
               </div>
@@ -241,8 +228,7 @@
                 <div class="mb-3">
                   <mat-form-field appearance="fill" fxFlex>
                     <mat-label>Warranty</mat-label>
-                    <input matInput formControlName="warranty" required type="text">
-                    <mat-error *ngIf="itemForm.get('warranty')?.hasError('required')">This field is mandatory.</mat-error>
+                    <input matInput formControlName="warranty" type="text">
                   </mat-form-field>
                 </div>
               </div>
@@ -252,8 +238,7 @@
                 <div class="mb-3">
                   <mat-form-field appearance="fill" fxFlex>
                     <mat-label>Supplier</mat-label>
-                    <input matInput formControlName="supplier" required type="text">
-                    <mat-error *ngIf="itemForm.get('supplier')?.hasError('required')">This field is mandatory.</mat-error>
+                    <input matInput formControlName="supplier"type="text">
                   </mat-form-field>
                 </div>
               </div>
@@ -261,7 +246,7 @@
                 <div class="mb-3">
                   <mat-form-field appearance="fill" fxFlex>
                     <mat-label>Unit of Measure (UOM)</mat-label>
-                    <input matInput formControlName="uom" required type="text">
+                    <input matInput formControlName="uom" type="text">
                     <mat-error *ngIf="itemForm.get('uom')?.hasError('required')">This field is mandatory.</mat-error>
                   </mat-form-field>
                 </div>

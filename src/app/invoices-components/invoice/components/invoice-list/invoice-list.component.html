@@ -119,11 +119,11 @@
                               <ul class="list-inline mb-0 font-size-16">
                                 <li class="list-inline-item">
                                   <a class="text-muted px-1">
-                                    <span style="color: red; cursor: pointer;margin-left: 5rem" (click)="removeInvoiceLine(i)">x</span>
+                                    <span style="color: red; cursor: pointer;margin-left: 7rem" (click)="removeInvoiceLine(i)">x</span>
                                   </a>
                                 </li>
-                                <p class="mb-0 mt-3">Discount : <span
-                                  class="fw-medium">{{ line.get('discountPercent')?.value }}</span></p>
+                                <p class="mb-0 mt-2">Discount :
+                                <input [min]="0" [max]="1" type="number" class="discountInput fw-medium" value="{{ line.get('discountPercent')?.value }}" formControlName="discountPercent" (change)="handleInputChange($event,line)"/>
                               </ul>
                             </div>
                           </div>
@@ -140,7 +140,7 @@
                               <div class="col-md-5">
                                 <div class="mt-3">
                                   <p class="text-muted mb-2">Quantity</p>
-                                  <input [min]="1" style="width: 41%;" type="number" class="form-control" value="{{ line.get('quantity')?.value }}" formControlName="quantity" (change)="handleQuantityChange($event,line)"/>
+                                  <input [min]="1" style="width: 41%;" type="number" class="form-control" value="{{ line.get('quantity')?.value }}" formControlName="quantity" (change)="handleInputChange($event,line)"/>
                                 </div>
                               </div>
                               <div class="col-md-3">
