@@ -254,33 +254,33 @@ export class InvoiceListComponent implements OnInit {
   }
 
   handleInvoiceGenerate() {
-    // this.ngxService.start();
+    this.ngxService.start();
     console.log(this.invoiceForm.value);
     this.pdfService.generateInvoicePDF(this.invoiceForm.value);
 
-    // if (this.invoiceForm.valid) {
-    //   this.invoiceService.addInvoice(this.invoiceForm.value).subscribe({
-    //     next: (response: any) => {
-    //       this.pdfService.generateInvoicePDF(this.invoiceForm.value);
-    //       this.ngxService.stop();
-    //       this.snackbarService.openSnackBar('Invoice generated successfully!', 'success');
-    //       this.invoiceForm.reset();
-    //       this.invoiceLines.clear();
-    //     },
-    //     error: (error) => {
-    //       this.ngxService.stop();
-    //       if (error.error?.message) {
-    //         this.responseMessage = error.error?.message;
-    //       } else {
-    //         this.responseMessage = GlobalConstants.genericError;
-    //       }
-    //       this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
-    //     }
-    //   });
-    // } else {
-    //   this.invoiceForm.markAllAsTouched();
-    //   this.ngxService.stop();
-    // }
+    if (this.invoiceForm.valid) {
+      this.invoiceService.addInvoice(this.invoiceForm.value).subscribe({
+        next: (response: any) => {
+          this.pdfService.generateInvoicePDF(this.invoiceForm.value);
+          this.ngxService.stop();
+          this.snackbarService.openSnackBar('Invoice generated successfully!', 'success');
+          this.invoiceForm.reset();
+          this.invoiceLines.clear();
+        },
+        error: (error) => {
+          this.ngxService.stop();
+          if (error.error?.message) {
+            this.responseMessage = error.error?.message;
+          } else {
+            this.responseMessage = GlobalConstants.genericError;
+          }
+          this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+        }
+      });
+    } else {
+      this.invoiceForm.markAllAsTouched();
+      this.ngxService.stop();
+    }
   }
 
 
